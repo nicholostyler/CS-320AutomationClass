@@ -1,4 +1,16 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+//Author Name: Nicholos Tyler
+
+//Date: 2/7/2021
+
+//Course ID: T3228
+
+//Description: AppointmentTest UnitTest class that tests the functionality and error testing of the class.
 
 class ContactServiceTest {
 
@@ -6,24 +18,17 @@ class ContactServiceTest {
     void AddContact() {
         ContactService testService = new ContactService();
         testService.AddContact("123");
-        if (testService.contacts.get(0).getID() == "123") {
-            assert true;
-        } else {
-            assert false;
-        }
+        assertTrue(testService.contacts.get(0).getID() == "123", "True: Successfully added contact");
     }
 
-    @org.junit.jupiter.api.Test
-    void AddDuplicateContact() {
-        ContactService testService = new ContactService();
-        testService.AddContact("123");
-        testService.AddContact("123");
-        if (testService.contacts.get(0).getID() == "123") {
-            assert true;
-        } else {
-            // should fail.
-            assert false;
-        }
+    @Test
+    void TestErrorDuplicateID() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            ContactService testService = new ContactService();
+            testService.AddContact("123");
+            testService.AddContact("123");
+            assertFalse(testService.contacts.get(0).getID() == "123");
+        }, "True: Error was thrown for duplicate ID.");
     }
 
     @org.junit.jupiter.api.Test
@@ -32,40 +37,23 @@ class ContactServiceTest {
         testService.AddContact("123");
         testService.AddContact("124");
         testService.AddContact("125");
-        if (testService.contacts.get(2).getID().equals("125")) {
-            assert true;
-        } else {
-            // should fail.
-            assert false;
-        }
+        assertTrue(testService.contacts.get(2).getID().equals("125"), "True: Was able to add multiple Contacts.");
     }
 
     @org.junit.jupiter.api.Test
     void GetContactBackAfterAdding() {
         ContactService testService = new ContactService();
         Contact getContact = testService.AddContact("123");
-        if (getContact.getID() == "123") {
-            assert true;
-        } else {
-            assert false;
-        }
+        assertTrue(getContact.getID() == "123", "True: Got the same contact back as was added.");
     }
 
 
     @org.junit.jupiter.api.Test
-    void DeleteConact() {
+    void DeleteContact() {
         ContactService testService = new ContactService();
         testService.AddContact("123");
-        if (testService.contacts.size() == 1) {
-            testService.DeleteContact("123");
-            if (testService.contacts.size() == 0) {
-                assert true;
-            } else {
-                assert false;
-            }
-        } else {
-            assert false;
-        }
+        testService.RemoveContact("123");
+        assertTrue(testService.contacts.size() == 0, "True: Successfully deleted contact.");
     }
 
     @org.junit.jupiter.api.Test
@@ -74,16 +62,6 @@ class ContactServiceTest {
         testService.AddContact("123");
         testService.contacts.get(0).setFirstName("Joe");
         testService.UpdateContact("123", "Nick", "Tyler", "0123456789", "123FakeStreet");
-        if (testService.contacts.get(0).getFirstName() == "Nick") {
-            assert true;
-        } else {
-            assert false;
-        }
-    }
-
-    @org.junit.jupiter.api.Test
-    void setAddress() {
-        Contact testContact = new Contact("1");
-        assertEquals(true, testContact.setLastName("123fakestreet"));
+        assertTrue(testService.contacts.get(0).getFirstName() == "Nick", "True: Successfully updated contact");
     }
 }

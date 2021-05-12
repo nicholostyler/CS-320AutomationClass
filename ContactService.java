@@ -32,6 +32,11 @@ public class ContactService {
     }
 
 
+    public void RemoveContact(String id) {
+        // If contact matches the passed in id.
+        contacts.removeIf(contact -> (contact.getID().equals(id) == true));
+    }
+
     public void DeleteContact(String id) {
         // Iterate over the contacts arraylist
         for (Contact contact : contacts) {
